@@ -861,7 +861,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		window.location = url;
 	};
 
-	JSO.prototype.inappbrowser = function(params) {
+	JSO.prototype.inappbrowser = function(params, options) {
 		var that = this;
 		return function(url, callback) {
 
@@ -894,7 +894,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			if (params.hasOwnProperty('target')) {
 				target = params.target;
 			}
-			var options = {};
 
 			utils.log("About to open url " + url);
 
@@ -1097,8 +1096,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		/*
 		 * Calculate which scopes to request, based upon provider config and request config.
 		 */
-		if (this.config.scopes && this.config.scopes.request) {
-			for(i = 0; i < this.config.scopes.request.length; i++) scopes.push(this.config.scopes.request[i]);
+		if (this.config.get('scopes') && this.config.get('scopes').request) {
+			for(i = 0; i < this.config.get('scopes').request.length; i++) scopes.push(this.config.get('scopes').request[i]);
 		}
 		if (opts && opts.scopes && opts.scopes.request) {
 			for(i = 0; i < opts.scopes.request.length; i++) scopes.push(opts.scopes.request[i]);
@@ -1111,8 +1110,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		/*
 		 * Calculate which scopes to request, based upon provider config and request config.
 		 */
-		if (this.config.scopes && this.config.scopes.require) {
-			for(i = 0; i < this.config.scopes.require.length; i++) scopes.push(this.config.scopes.require[i]);
+		if (this.config.get('scopes') && this.config.get('scopes').require) {
+			for(i = 0; i < this.config.get('scopes').require.length; i++) scopes.push(this.config.get('scopes').require[i]);
 		}
 		if (opts && opts.scopes && opts.scopes.require) {
 			for(i = 0; i < opts.scopes.require.length; i++) scopes.push(opts.scopes.require[i]);
