@@ -59,7 +59,7 @@ define(function(require, exports, module) {
 		window.location = url;
 	};
 
-	JSO.prototype.inappbrowser = function(params) {
+	JSO.prototype.inappbrowser = function(params, options) {
 		var that = this;
 		return function(url, callback) {
 
@@ -92,7 +92,6 @@ define(function(require, exports, module) {
 			if (params.hasOwnProperty('target')) {
 				target = params.target;
 			}
-			var options = {};
 
 			utils.log("About to open url " + url);
 
