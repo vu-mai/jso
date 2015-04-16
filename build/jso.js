@@ -1234,7 +1234,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		}
 
 		request.client_id = client_id;
-		request.response_type = response_type;
+
 		request.providerID = this.providerID;
 
 		var code = store.getCode(providerID);
