@@ -726,6 +726,14 @@ define('store',['require','exports','module','./utils'],function(require, export
 	};
 
 
+	store.getCode = function(provider){
+		return JSON.parse(localStorage.getItem("code-" + provider));
+	};
+
+	store.saveCode = function(provider, code){
+		localStorage.setItem("code-" + provider, JSON.stringify(code));
+	};
+
 
 	return store;
 });
@@ -1072,18 +1080,20 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		 * 3. Specific permanent scope.
 		 * 4. Default library lifetime:
 		 */
-		if (atoken.expires_in) {
-			atoken.expires = now + parseInt(atoken.expires_in, 10);
-		} else if (instance.config.get('default_lifetime', null) === false) {
-			// Token is permanent.
-		} else if (instance.config.has('permanent_scope')) {
-			if (!store.hasScope(atoken, instance.config.get('permanent_scope'))) {
-				atoken.expires = now + 3600*24*365*5;
+		if(hasAccessToken){
+			if (atoken.expires_in) {
+				atoken.expires = now + parseInt(atoken.expires_in, 10);
+			} else if (instance.config.get('default_lifetime', null) === false) {
+				// Token is permanent.
+			} else if (instance.config.has('permanent_scope')) {
+				if (!store.hasScope(atoken, instance.config.get('permanent_scope'))) {
+					atoken.expires = now + 3600*24*365*5;
+				}
+			} else if (instance.config.has('default_lifetime')) {
+				atoken.expires = now + instance.config.get('default_lifetime');
+			} else {
+				atoken.expires = now + 3600;
 			}
-		} else if (instance.config.has('default_lifetime')) {
-			atoken.expires = now + instance.config.get('default_lifetime');
-		} else {
-			atoken.expires = now + 3600;
 		}
 
 		/*
@@ -1096,8 +1106,11 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		}
 
 
-
-		store.saveToken(state.providerID, atoken);
+		if(hasAccessToken){
+			store.saveToken(state.providerID, atoken);
+		}else if(hasAccessCode){
+			store.saveCode(state.providerID, atoken);
+		}
 
 		if (state.restoreHash) {
 			window.location.hash = state.restoreHash;
@@ -1168,7 +1181,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		// var scopesRequest  = this._getRequestScopes(opts);
 		
 		var scopesRequire = this._getRequiredScopes(opts);
-		var token = store.getToken(this.providerID, scopesRequire);
+		var token = store.getToken(this.providerID, scopesRequire, type);
 
 		if (token) {
 			return callback(token);
@@ -1186,24 +1199,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 	};
 
 
-	// exp.jso_ensureTokens = function (ensure) {
-	// 	var providerid, scopes, token;
-	// 	for(providerid in ensure) {
-	// 		scopes = undefined;
-	// 		if (ensure[providerid]) scopes = ensure[providerid];
-	// 		token = store.getToken(providerid, scopes);
-
-	// 		utils.log("Ensure token for provider [" + providerid + "] ");
-	// 		utils.log(token);
-
-	// 		if (token === null) {
-	// 			jso_authrequest(providerid, scopes);
-	// 		}
-	// 	}
-
-
-	// 	return true;
-	// }
 
 
 	JSO.prototype._authorize = function(callback, opts) {
@@ -1215,17 +1210,14 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		var authorization = this.config.get('authorization', null, true);
 		var client_id = this.config.get('client_id', null, true);
 		var client_secret = this.config.get('client_secret', null, false);
-		var response_type = this.config.get('response_type', null, true);
+		var flow = this.config.get('flow', null, true);
 
 		utils.log("About to send an authorization request to this entry:", authorization);
 		utils.log("Options", opts, "callback", callback);
 
-
 		request = {
-			"response_type": response_type,
 			"state": utils.uuid()
 		};
-
 
 
 		if (callback && typeof callback === 'function') {
@@ -1243,37 +1235,51 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		request.client_id = client_id;
 		request.response_type = response_type;
+		request.providerID = this.providerID;
 
+		var code = store.getCode(providerID);
+
+		if(code !== null){
+			request.grant_type = "authorization_code";
+			request.code = code;
+		}else{
+			request.response_type = "code";
+		}
 
 		/*
 		 * Calculate which scopes to request, based upon provider config and request config.
 		 */
 		scopes = this._getRequestScopes(opts);
+
 		if (scopes.length > 0) {
 			request.scope = utils.scopeList(scopes);
 		}
 
 		utils.log("DEBUG REQUEST"); utils.log(request);
 
-		authurl = utils.encodeURL(authorization, request);
+		if(code === null){
+			authurl = utils.encodeURL(authorization, request);
 
-		// We'd like to cache the hash for not loosing Application state. 
-		// With the implciit grant flow, the hash will be replaced with the access
-		// token when we return after authorization.
-		if (window.location.hash) {
-			request.restoreHash = window.location.hash;
+			// We'd like to cache the hash for not loosing Application state. 
+			// With the implciit grant flow, the hash will be replaced with the access
+			// token when we return after authorization.
+			if (window.location.hash) {
+				request.restoreHash = window.location.hash;
+			}
+
+			if (scopes) {
+				request.scopes = scopes;
+			}
+
+			utils.log("Saving state [" + request.state + "]");
+			utils.log(JSON.parse(JSON.stringify(request)));
+
+			store.saveState(request.state, request);
+			this.gotoAuthorizeURL(authurl, callback);
+		}else {
+			console.log("IS AUTHORIZATION_CODE REQUEST");
 		}
-		request.providerID = this.providerID;
-		if (scopes) {
-			request.scopes = scopes;
-		}
 
-
-		utils.log("Saving state [" + request.state + "]");
-		utils.log(JSON.parse(JSON.stringify(request)));
-
-		store.saveState(request.state, request);
-		this.gotoAuthorizeURL(authurl, callback);
 	};
 
 
@@ -1344,180 +1350,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		}, oauthOptions);
 		
 	};
-
-
-
-
-
-	/* 
-	 * Redirects the user to a specific URL
-	 */
-	// api_redirect = function(url) {
-	// 	setTimeout(function() {
-	// 		window.location = url;
-	// 	}, 2000);
-	// };
-
-
-
-
-
-
-
-
-
-
-	// exp.jso_ensureTokens = function (ensure) {
-	// 	var providerid, scopes, token;
-	// 	for(providerid in ensure) {
-	// 		scopes = undefined;
-	// 		if (ensure[providerid]) scopes = ensure[providerid];
-	// 		token = store.getToken(providerid, scopes);
-
-	// 		utils.log("Ensure token for provider [" + providerid + "] ");
-	// 		utils.log(token);
-
-	// 		if (token === null) {
-	// 			jso_authrequest(providerid, scopes);
-	// 		}
-	// 	}
-
-
-	// 	return true;
-	// }
-
-
-	// exp.jso_configure = function(c, opts) {
-	// 	config = c;
-	// 	setOptions(opts);
-	// 	try {
-
-	// 		var def = exp.jso_findDefaultEntry(c);
-	// 		utils.log("jso_configure() about to check for token for this entry", def);
-	// 		exp.jso_checkfortoken(def);	
-
-	// 	} catch(e) {
-	// 		utils.log("Error when retrieving token from hash: " + e, c, opts);
-	// 		window.location.hash = "";
-	// 	}
-		
-	// }
-
-	// exp.jso_dump = function() {
-	// 	var key;
-	// 	for(key in config) {
-
-	// 		utils.log("=====> Processing provider [" + key + "]");
-	// 		utils.log("=] Config");
-	// 		utils.log(config[key]);
-	// 		utils.log("=] Tokens")
-	// 		utils.log(store.getTokens(key));
-
-	// 	}
-	// }
-
-	// exp.jso_wipe = function() {
-	// 	var key;
-	// 	utils.log("jso_wipe()");
-	// 	for(key in config) {
-	// 		utils.log("Wipping tokens for " + key);
-	// 		store.wipeTokens(key);
-	// 	}
-	// }
-
-	// exp.jso_getToken = function(providerid, scopes) {
-	// 	var token = store.getToken(providerid, scopes);
-	// 	if (!token) return null;
-	// 	if (!token["access_token"]) return null;
-	// 	return token["access_token"];
-	// }
-
-
-
-
-
-
-
-
-
-
-	// /*
-	//  * From now on, we only perform tasks that require jQuery.
-	//  * Like adding the $.oajax function.
-	//  */
-	// if (typeof $ === 'undefined') return;
-
-	// $.oajax = function(settings) {
-	// 	var 
-	// 		allowia,
-	// 		scopes,
-	// 		token,
-	// 		providerid,
-	// 		co;
-		
-	// 	providerid = settings.jso_provider;
-	// 	allowia = settings.jso_allowia || false;
-	// 	scopes = settings.jso_scopes;
-	// 	token = api_storage.getToken(providerid, scopes);
-	// 	co = config[providerid];
-
-	// 	// var successOverridden = settings.success;
-	// 	// settings.success = function(response) {
-	// 	// }
-
-	// 	var errorOverridden = settings.error || null;
-
-	// 	var performAjax = function() {
-	// 		// utils.log("Perform ajax!");
-
-	// 		if (!token) throw "Could not perform AJAX call because no valid tokens was found.";	
-
-	// 		if (co["presenttoken"] && co["presenttoken"] === "qs") {
-	// 			// settings.url += ((h.indexOf("?") === -1) ? '?' : '&') + "access_token=" + encodeURIComponent(token["access_token"]);
-	// 			if (!settings.data) settings.data = {};
-	// 			settings.data["access_token"] = token["access_token"];
-	// 		} else {
-	// 			if (!settings.headers) settings.headers = {};
-	// 			settings.headers["Authorization"] = "Bearer " + token["access_token"];
-	// 		}
-	// 		$.ajax(settings);
-	// 	};
-
-	// 	settings.error = function(jqXHR, textStatus, errorThrown) {
-	// 		utils.log('error(jqXHR, textStatus, errorThrown)');
-	// 		utils.log(jqXHR);
-	// 		utils.log(textStatus);
-	// 		utils.log(errorThrown);
-
-	// 		if (jqXHR.status === 401) {
-
-	// 			utils.log("Token expired. About to delete this token");
-	// 			utils.log(token);
-	// 			api_storage.wipeTokens(providerid);
-
-	// 		}
-	// 		if (errorOverridden && typeof errorOverridden === 'function') {
-	// 			errorOverridden(jqXHR, textStatus, errorThrown);
-	// 		}
-	// 	}
-
-
-	// 	if (!token) {
-	// 		if (allowia) {
-	// 			utils.log("Perform authrequest");
-	// 			jso_authrequest(providerid, scopes, function() {
-	// 				token = api_storage.getToken(providerid, scopes);
-	// 				performAjax();
-	// 			});
-	// 			return;
-	// 		} else {
-	// 			throw "Could not perform AJAX call because no valid tokens was found.";	
-	// 		}
-	// 	}
-
-
-	// 	performAjax();
-	// };
 
 	return JSO;
 

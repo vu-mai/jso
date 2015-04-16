@@ -139,6 +139,14 @@ define(function(require, exports, module) {
 	};
 
 
+	store.getCode = function(provider){
+		return JSON.parse(localStorage.getItem("code-" + provider));
+	};
+
+	store.saveCode = function(provider, code){
+		localStorage.setItem("code-" + provider, JSON.stringify(code));
+	};
+
 
 	return store;
 });
