@@ -72,7 +72,8 @@ define(function(require, exports, module) {
 		            var url = inAppBrowserEvent.url;
 		            utils.log("loadstop event triggered, and the url is now " + url);
 
-		            if (that.URLcontainsToken(url)) {
+		            if (that.URLcontainsToken(url) || that.URLcontainsCode(url)) {
+
 		                // ref.removeEventListener('loadstop', onNewURLinspector);
 		                setTimeout(function() {
 		                	ref.close();
@@ -135,14 +136,7 @@ define(function(require, exports, module) {
 	};
 
 
-
-
-	/**
-	 * Do some sanity checking whether an URL contains a access_token in an hash fragment.
-	 * Used in URL change event trackers, to detect responses from the provider.
-	 * @param {[type]} url [description]
-	 */
-	JSO.prototype.URLcontainsToken = function(url) {
+	function URLcontainsString(url, string){
 		// If a url is provided 
 		if (url) {
 			// utils.log('Hah, I got the url and it ' + url);
@@ -155,9 +149,33 @@ define(function(require, exports, module) {
 		 * Start with checking if there is a token in the hash
 		 */
 		if (h.length < 2) return false;
-		if (h.indexOf("access_token") === -1) return false;
+		if (h.indexOf(string) === -1) return false;
 		return true;
+
+	}
+
+	/**
+	 * Do some sanity checking whether an URL contains a access_token in an hash fragment.
+	 * Used in URL change event trackers, to detect responses from the provider.
+	 * @param {[type]} url [description]
+	 */
+	JSO.prototype.URLcontainsToken = function(url) {
+		return URLcontainsString(url, "token");
 	};
+
+	/**
+	 * Do some sanity checking whether an URL contains a code in an hash fragment.
+	 * Used in URL change event trackers, to detect responses from the provider.
+	 * @param {[type]} url [description]
+	 */
+	JSO.prototype.URLcontainsCode = function(url) {
+		if(!URLcontainsString(url, "code")){
+			return url.indexOf("code") > -1;
+		}
+		return true;
+	};	
+
+	
 
 	/**
 	 * Check if the hash contains an access token. 
@@ -189,9 +207,25 @@ define(function(require, exports, module) {
 		/*
 		 * Start with checking if there is a token in the hash
 		 */
+		
+		var hasAccessToken = h.indexOf("access_token") > -1;
+		var hasCode = h.indexOf("code") > -1;
+
+		if(!hasCode){
+			hasCode = url.indexOf("code") > -1;
+
+			if(hasCode){
+				h = h + url.substring(url.indexOf('code'), url.indexOf('#'));
+			}
+		}
+
 		if (h.length < 2) return;
-		if (h.indexOf("access_token") === -1) return;
+		if (!hasCode  && !hasAccessToken) return;
+
 		h = h.substring(1);
+
+		console.log("This is a h");
+
 		atoken = utils.parseQueryString(h);
 
 		if (atoken.state) {
