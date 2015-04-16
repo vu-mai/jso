@@ -368,13 +368,15 @@ define(function(require, exports, module) {
 
 		var authorization = this.config.get('authorization', null, true);
 		var client_id = this.config.get('client_id', null, true);
+		var client_secret = this.config.get('client_secret', null, false);
+		var response_type = this.config.get('response_type', null, true);
 
 		utils.log("About to send an authorization request to this entry:", authorization);
 		utils.log("Options", opts, "callback", callback);
 
 
 		request = {
-			"response_type": "token",
+			"response_type": response_type,
 			"state": utils.uuid()
 		};
 
@@ -389,8 +391,12 @@ define(function(require, exports, module) {
 			request.redirect_uri = this.config.get('redirect_uri', '');
 		}
 
-		request.client_id = client_id;
+		if(client_secret !== null){
+			request.client_secret = client_secret;
+		}
 
+		request.client_id = client_id;
+		request.response_type = response_type;
 
 
 		/*
