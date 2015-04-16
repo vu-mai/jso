@@ -209,23 +209,23 @@ define(function(require, exports, module) {
 		 */
 		
 		var hasAccessToken = h.indexOf("access_token") > -1;
-		var hasCode = h.indexOf("code") > -1;
+		var hasAccessCode = h.indexOf("code") > -1;
 		var hasState = h.indexOf("state") > -1;
 
 		console.log("THIS IS THE URL DECODED");
 		console.log(utils.parseQueryString(url));
 
 
-		if(!hasCode){
-			hasCode = url.indexOf("code") > -1;
+		if(!hasAccessCode){
+			hasAccessCode = url.indexOf("code") > -1;
 
-			if(hasCode && url.indexOf('?') > -1){
+			if(hasAccessCode && url.indexOf('?') > -1){
 				h = h +'&' + url.substring(url.indexOf('?') + 1, url.indexOf('#'));
 			}
 		}
 
 		if (h.length < 2) return;
-		if (!hasCode  && !hasAccessToken) return;
+		if (!hasAccessCode  && !hasAccessToken) return;
 
 		h = h.substring(1);
 
