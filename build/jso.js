@@ -1211,6 +1211,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		var client_id = this.config.get('client_id', null, true);
 		var client_secret = this.config.get('client_secret', null, false);
 		var flow = this.config.get('flow', null, true);
+		var providerID = this.config.get('providerID', null, true);
 
 		utils.log("About to send an authorization request to this entry:", authorization);
 		utils.log("Options", opts, "callback", callback);
@@ -1235,7 +1236,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		request.client_id = client_id;
 
-		request.providerID = this.providerID;
+		request.providerID = providerID;
 
 		var code = store.getCode(providerID);
 
