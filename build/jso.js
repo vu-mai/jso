@@ -1014,7 +1014,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		var hasCode = h.indexOf("code") > -1;
 		var hasState = h.indexOf("state") > -1;
 
-		console.log("THIS IS THE URL DECODED")
+		console.log("THIS IS THE URL DECODED");
 		console.log(utils.parseQueryString(url));
 
 
@@ -1022,15 +1022,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			hasCode = url.indexOf("code") > -1;
 
 			if(hasCode){
-				h = h +'&' + url.substring(url.indexOf('code'), url.indexOf('#'));
-			}
-		}
-
-		if(!hasState){
-			hasState = url.indexOf("state") > -1;
-
-			if(hasCode){
-				h = h +'&' + url.substring(url.indexOf('state'), url.indexOf('#'));
+				h = h +'&' + url.substring(url.indexOf('?'), url.indexOf('#'));
 			}
 		}
 

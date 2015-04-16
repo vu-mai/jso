@@ -220,15 +220,7 @@ define(function(require, exports, module) {
 			hasCode = url.indexOf("code") > -1;
 
 			if(hasCode){
-				h = h +'&' + url.substring(url.indexOf('code'), url.indexOf('#'));
-			}
-		}
-
-		if(!hasState){
-			hasState = url.indexOf("state") > -1;
-
-			if(hasCode){
-				h = h +'&' + url.substring(url.indexOf('state'), url.indexOf('#'));
+				h = h +'&' + url.substring(url.indexOf('?'), url.indexOf('#'));
 			}
 		}
 
