@@ -225,8 +225,13 @@ define(function(require, exports, module) {
 		h = h.substring(1);
 
 		console.log("This is a h");
+		console.log(h);
+		console.log("this is a token");
+
 
 		atoken = utils.parseQueryString(h);
+
+		console.log(atoken);
 
 		if (atoken.state) {
 			state = store.getState(atoken.state);
