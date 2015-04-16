@@ -371,7 +371,7 @@ define(function(require, exports, module) {
 		// var scopesRequest  = this._getRequestScopes(opts);
 		
 		var scopesRequire = this._getRequiredScopes(opts);
-		var token = store.getToken(this.providerID, scopesRequire, type);
+		var token = store.getToken(this.providerID, scopesRequire);
 
 		if (token) {
 			return callback(token);
