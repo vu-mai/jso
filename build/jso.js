@@ -1021,8 +1021,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		if(!hasCode){
 			hasCode = url.indexOf("code") > -1;
 
-			if(hasCode){
-				h = h +'&' + url.substring(url.indexOf('?'), url.indexOf('#'));
+			if(hasCode && url.indexOf('?') > -1){
+				h = h +'&' + url.substring(url.indexOf('?') + 1, url.indexOf('#'));
 			}
 		}
 
