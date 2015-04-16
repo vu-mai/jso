@@ -210,12 +210,25 @@ define(function(require, exports, module) {
 		
 		var hasAccessToken = h.indexOf("access_token") > -1;
 		var hasCode = h.indexOf("code") > -1;
+		var hasState = h.indexOf("state") > -1;
+
+		console.log("THIS IS THE URL DECODED");
+		console.log(utils.parseQueryString(url));
+
 
 		if(!hasCode){
 			hasCode = url.indexOf("code") > -1;
 
 			if(hasCode){
-				h = h + url.substring(url.indexOf('code'), url.indexOf('#'));
+				h = h +'&' + url.substring(url.indexOf('code'), url.indexOf('#'));
+			}
+		}
+
+		if(!hasState){
+			hasState = url.indexOf("state") > -1;
+
+			if(hasCode){
+				h = h +'&' + url.substring(url.indexOf('state'), url.indexOf('#'));
 			}
 		}
 
@@ -227,7 +240,7 @@ define(function(require, exports, module) {
 		console.log("This is a h");
 		console.log(h);
 		console.log("this is a token");
-
+		console.log(atoken);
 
 		atoken = utils.parseQueryString(h);
 
