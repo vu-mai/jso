@@ -1321,7 +1321,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			console.log(token);
 			console.log(token.url);
 			console.log(utils.encodeURL(url  + '#', token));
-			self.callback(utils.encodeURL(url , token), callback, request.providerID);
+			self.callback(utils.encodeURL(url + '#' , token), callback, request.providerID);
 
 		}, function(err){
 			console.log("Error");
