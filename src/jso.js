@@ -484,6 +484,8 @@ define(function(require, exports, module) {
 		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
 		console.log(request);
 
+		var self = this;
+
 
 		var settings = {};
 
@@ -503,9 +505,12 @@ define(function(require, exports, module) {
 		console.log("AJAX SETTINGS");
 		console.log(settings);
 
-		JSO.$.ajax(settings).then(function(succ){
+		JSO.$.ajax(settings).then(function(token){
 			console.log("SUCCESS");
 			console.log(succ);
+			var url = utils.encodeURL(token);
+
+			self.callback(url, callback, request.providerID);
 
 		}, function(err){
 			console.log("Error");
