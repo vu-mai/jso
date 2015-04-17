@@ -479,6 +479,7 @@ define(function(require, exports, module) {
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
 			this.performTokenRequest(request, callback);
+			this.callback(authurl, callback, request.providerID);
 		}
 
 	};
@@ -486,9 +487,6 @@ define(function(require, exports, module) {
 	JSO.prototype.performTokenRequest = function(request, callback){
 		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
 		console.log(request);
-
-//					this.callback(authurl, callback, request.providerID);
-
 	};
 
 	JSO.prototype.gotoAuthorizeURL = function(url, callback) {
