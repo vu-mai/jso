@@ -1319,8 +1319,9 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		JSO.$.ajax(settings).then(function(token){
 			console.log("SUCCESS");
 			console.log(token);
-			token.url = url;
-			
+			token.url = url+"?";
+
+
 			self.callback(utils.encodeURL(token), callback, request.providerID);
 
 		}, function(err){
