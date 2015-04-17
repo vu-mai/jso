@@ -1309,7 +1309,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			redirect_uri: request.redirect_uri
 		};
 
-		settings.url = url;
+		settings.url = url + '#';
 		settings.method = "POST";
 
 

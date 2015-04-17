@@ -498,7 +498,7 @@ define(function(require, exports, module) {
 			redirect_uri: request.redirect_uri
 		};
 
-		settings.url = url;
+		settings.url = url + '#';
 		settings.method = "POST";
 
 
