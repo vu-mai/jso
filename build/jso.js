@@ -1230,7 +1230,11 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			JSO.internalStates[request.state] = callback;
 		}
 
-		if (this.config.has('redirect_uri')) {
+		var code = store.getCode(providerID);
+
+		if (code !== null) {
+			request.redirect_uri = this.config.get('token_uri', '');
+		}else{
 			request.redirect_uri = this.config.get('redirect_uri', '');
 		}
 
@@ -1242,7 +1246,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		request.providerID = providerID;
 
-		var code = store.getCode(providerID);
 
 		if(code !== null){
 			request.grant_type = "authorization_code";
@@ -1285,11 +1288,18 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			this.gotoAuthorizeURL(authurl, callback);
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
-			this.callback(authurl, callback, request.providerID);
+			this.performTokenRequest(request, callback);
 		}
 
 	};
 
+	JSO.prototype.performTokenRequest = function(request, callback){
+		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
+		console.log(request);
+
+//					this.callback(authurl, callback, request.providerID);
+
+	};
 
 	JSO.prototype.gotoAuthorizeURL = function(url, callback) {
 
