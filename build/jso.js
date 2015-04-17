@@ -1309,7 +1309,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			redirect_uri: request.redirect_uri
 		};
 
-		settings.url = url + '#';
+		settings.url = url;
 		settings.method = "POST";
 
 
@@ -1320,8 +1320,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			console.log("SUCCESS");
 			console.log(token);
 			console.log(token.url);
-			console.log(utils.encodeURL(url, token));
-			self.callback(utils.encodeURL(url, token), callback, request.providerID);
+			console.log(utils.encodeURL(url  + '#', token));
+			self.callback(utils.encodeURL(url  + '#', token), callback, request.providerID);
 
 		}, function(err){
 			console.log("Error");
