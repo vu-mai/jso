@@ -508,10 +508,9 @@ define(function(require, exports, module) {
 		JSO.$.ajax(settings).then(function(token){
 			console.log("SUCCESS");
 			console.log(token);
-			token.url = url + '#';
-
 			console.log(token.url);
-			self.callback(utils.encodeURL(token), callback, request.providerID);
+			console.log(utils.encodeURL(url, token));
+			self.callback(utils.encodeURL(url, token), callback, request.providerID);
 
 		}, function(err){
 			console.log("Error");
