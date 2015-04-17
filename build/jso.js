@@ -1041,10 +1041,10 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		console.log("This is a h");
 		console.log(h);
-		console.log("this is a token");
-		console.log(atoken);
 
 		atoken = utils.parseQueryString(h);
+		console.log("this is a token");
+		console.log(atoken);
 
 		console.log(atoken);
 
@@ -1120,6 +1120,10 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 
 		utils.log(atoken);
+
+		if(hasAccessCode){
+			
+		}
 
 		utils.log("Looking up internalStates storage for a stored callback... ", "state=" + atoken.state, JSO.internalStates);
 
@@ -1258,27 +1262,30 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		utils.log("DEBUG REQUEST"); utils.log(request);
 
+		authurl = utils.encodeURL(authorization, request);
+
+		// We'd like to cache the hash for not loosing Application state. 
+		// With the implciit grant flow, the hash will be replaced with the access
+		// token when we return after authorization.
+		if (window.location.hash) {
+			request.restoreHash = window.location.hash;
+		}
+
+		if (scopes) {
+			request.scopes = scopes;
+		}
+
+		utils.log("Saving state [" + request.state + "]");
+		utils.log(JSON.parse(JSON.stringify(request)));
+
+		store.saveState(request.state, request);
+
 		if(code === null){
-			authurl = utils.encodeURL(authorization, request);
 
-			// We'd like to cache the hash for not loosing Application state. 
-			// With the implciit grant flow, the hash will be replaced with the access
-			// token when we return after authorization.
-			if (window.location.hash) {
-				request.restoreHash = window.location.hash;
-			}
-
-			if (scopes) {
-				request.scopes = scopes;
-			}
-
-			utils.log("Saving state [" + request.state + "]");
-			utils.log(JSON.parse(JSON.stringify(request)));
-
-			store.saveState(request.state, request);
 			this.gotoAuthorizeURL(authurl, callback);
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
+			this.callback(authurl, callback, request.providerID);
 		}
 
 	};
@@ -1333,9 +1340,12 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			}
 		};
 
-
-		return this.getToken(function(token) {
+		function tokenCallback(token) {
 			utils.log("Ready. Got an token, and ready to perform an AJAX call", token);
+
+			if(token.code !== null){
+				return that.getToken(tokenCallback, oauthOptions);
+			}
 
 			if (that.config.get('presenttoken', null) === 'qs') {
 				// settings.url += ((h.indexOf("?") === -1) ? '?' : '&') + "access_token=" + encodeURIComponent(token["access_token"]);
@@ -1348,7 +1358,15 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			utils.log('$.ajax settings', settings);
 			return JSO.$.ajax(settings);
 
-		}, oauthOptions);
+		}
+
+		token = this.getToken(tokenCallback, oauthOptions);
+
+
+		console.log("I FOUND A TOKEN MUHAHA");
+
+		return token;
+
 		
 	};
 
