@@ -498,7 +498,6 @@ define(function(require, exports, module) {
 		settings.url = url;
 		settings.method = "POST";
 
-		settings.
 
 		console.log("AJAX SETTINGS");
 		console.log(settings);

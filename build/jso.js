@@ -1309,7 +1309,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		settings.url = url;
 		settings.method = "POST";
 
-		settings.
 
 		console.log("AJAX SETTINGS");
 		console.log(settings);
