@@ -1290,15 +1290,31 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
 			this.performTokenRequest(request, callback);
-			this.callback(authurl, callback, request.providerID);
 		}
 
 	};
 
 	JSO.prototype.performTokenRequest = function(request, callback){
-		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST")
-		console.log(request)
-	}
+		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
+		console.log(request);
+
+		var settings = {
+			state: request.state,
+			grant_type: request.grant_type,
+			client_id: request.client_id,
+			client_secret: request.client_secret,
+			code: request.code.code
+		};
+
+		JSO.$.ajax(settings).then(function(succ){
+			console.log("SUCCESS");
+			console.log(succ);
+
+		}, function(err){
+			console.log("Error");
+			console.log(err);
+		});
+	};
 
 	JSO.prototype.gotoAuthorizeURL = function(url, callback) {
 
