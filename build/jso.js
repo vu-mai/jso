@@ -1303,7 +1303,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			grant_type: request.grant_type,
 			client_id: request.client_id,
 			client_secret: request.client_secret,
-			code: request.code.code
+			code: request.code.code,
+			redirect_uri: request.redirect_uri
 		};
 
 		settings.url = url;
