@@ -320,7 +320,7 @@ define(function(require, exports, module) {
 		if (JSO.internalStates[atoken.state] && typeof JSO.internalStates[atoken.state] === 'function') {
 			utils.log("InternalState is set, calling it now!");
 			console.log(JSO.internalStates[atoken.state]);
-			//JSO.internalStates[atoken.state](atoken);
+			JSO.internalStates[atoken.state](atoken);
 			delete JSO.internalStates[atoken.state];
 		}
 
