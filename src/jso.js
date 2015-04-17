@@ -402,6 +402,8 @@ define(function(require, exports, module) {
 			scopes;
 
 		var authorization = this.config.get('authorization', null, true);
+		var token_uri = request.redirect_uri = this.config.get('token_uri', null, true);
+
 		var client_id = this.config.get('client_id', null, true);
 		var client_secret = this.config.get('client_secret', null, false);
 		var flow = this.config.get('flow', null, true);
@@ -422,12 +424,8 @@ define(function(require, exports, module) {
 
 		var code = store.getCode(providerID);
 
-		if (code !== null) {
-			request.redirect_uri = this.config.get('token_uri', '');
-		}else{
-			request.redirect_uri = this.config.get('redirect_uri', '');
-		}
-
+		request.redirect_uri = this.config.get('redirect_uri', '');
+		
 		if(client_secret !== null){
 			request.client_secret = client_secret;
 		}
@@ -478,16 +476,17 @@ define(function(require, exports, module) {
 			this.gotoAuthorizeURL(authurl, callback);
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
-			this.performTokenRequest(request, callback);
+			this.performTokenRequest(token_uri, request, callback);
 		}
 
 	};
 
-	JSO.prototype.performTokenRequest = function(request, callback){
+	JSO.prototype.performTokenRequest = function(url, request, callback){
 		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
 		console.log(request);
 
 		var settings = {
+			url: url,
 			state: request.state,
 			grant_type: request.grant_type,
 			client_id: request.client_id,
