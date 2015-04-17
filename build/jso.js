@@ -730,6 +730,10 @@ define('store',['require','exports','module','./utils'],function(require, export
 		return JSON.parse(localStorage.getItem("code-" + provider));
 	};
 
+	store.wipeCode = function(provider){
+		localStorage.removeItem("code-" + provider);
+	};
+
 	store.saveCode = function(provider, code){
 		localStorage.setItem("code-" + provider, JSON.stringify(code));
 	};
