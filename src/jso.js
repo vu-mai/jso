@@ -472,7 +472,6 @@ define(function(require, exports, module) {
 		store.saveState(request.state, request);
 
 		if(code === null){
-
 			this.gotoAuthorizeURL(authurl, callback);
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
@@ -493,6 +492,9 @@ define(function(require, exports, module) {
 			client_secret: request.client_secret,
 			code: request.code.code
 		};
+
+		console.log("AJAX SETTINGS");
+		console.log(settings);
 
 		JSO.$.ajax(settings).then(function(succ){
 			console.log("SUCCESS");
@@ -576,7 +578,6 @@ define(function(require, exports, module) {
 		token = this.getToken(tokenCallback, oauthOptions);
 
 
-		console.log("I FOUND A TOKEN MUHAHA");
 
 		return token;
 

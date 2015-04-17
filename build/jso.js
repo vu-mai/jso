@@ -1283,7 +1283,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		store.saveState(request.state, request);
 
 		if(code === null){
-
 			this.gotoAuthorizeURL(authurl, callback);
 		}else {
 			console.log("IS AUTHORIZATION_CODE REQUEST");
@@ -1304,6 +1303,9 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			client_secret: request.client_secret,
 			code: request.code.code
 		};
+
+		console.log("AJAX SETTINGS");
+		console.log(settings);
 
 		JSO.$.ajax(settings).then(function(succ){
 			console.log("SUCCESS");
@@ -1387,7 +1389,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		token = this.getToken(tokenCallback, oauthOptions);
 
 
-		console.log("I FOUND A TOKEN MUHAHA");
 
 		return token;
 
