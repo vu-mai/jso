@@ -59,7 +59,7 @@ define(function() {
 
 		if (typeof pointer === 'undefined') {
 			if (isRequired) {
-				throw new Error("Configuration option [" + splittedKeys[i] + "] required but not provided.");
+				throw new Error("Configuration option [" + splittedKeys[i] + "] required but not provided."  + this.config);
 			}
 			return defaultValue;
 		}
