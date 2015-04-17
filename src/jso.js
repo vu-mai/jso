@@ -319,8 +319,8 @@ define(function(require, exports, module) {
 
 		if (JSO.internalStates[atoken.state] && typeof JSO.internalStates[atoken.state] === 'function') {
 			utils.log("InternalState is set, calling it now!");
-			/*JSO.internalStates[atoken.state](atoken);
-			delete JSO.internalStates[atoken.state];*/
+			JSO.internalStates[atoken.state](atoken);
+			delete JSO.internalStates[atoken.state];
 		}
 
 
