@@ -484,14 +484,21 @@ define(function(require, exports, module) {
 		console.log("IM ABOUT TO PERFORM A TOKEN REQUEST");
 		console.log(request);
 
-		var settings = {
-			url: url,
+
+		var settings = {};
+
+		settings.data = {
 			state: request.state,
 			grant_type: request.grant_type,
 			client_id: request.client_id,
 			client_secret: request.client_secret,
 			code: request.code.code
 		};
+
+		settings.url = url;
+		settings.method = "POST";
+
+		settings.
 
 		console.log("AJAX SETTINGS");
 		console.log(settings);
