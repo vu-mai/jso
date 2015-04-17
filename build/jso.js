@@ -1213,7 +1213,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			scopes;
 
 		var authorization = this.config.get('authorization', null, true);
-		var token_uri = request.redirect_uri = this.config.get('token_uri', null, true);
+		var token_uri = this.config.get('token_uri', null, true);
 
 		var client_id = this.config.get('client_id', null, true);
 		var client_secret = this.config.get('client_secret', null, false);
