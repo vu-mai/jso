@@ -1383,7 +1383,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		function tokenCallback(token) {
 			utils.log("Ready. Got an token, and ready to perform an AJAX call", token);
 
-			if(token.code !== null){
+			if(token.code !== null && token.access_token === null && token.code !== undefined && token.access_token === undefined){
 				return that.getToken(tokenCallback, oauthOptions);
 			}
 
