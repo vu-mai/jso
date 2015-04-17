@@ -319,7 +319,8 @@ define(function(require, exports, module) {
 
 		if (JSO.internalStates[atoken.state] && typeof JSO.internalStates[atoken.state] === 'function') {
 			utils.log("InternalState is set, calling it now!");
-			JSO.internalStates[atoken.state](atoken);
+			console.log(JSO.internalStates[atoken.state]);
+			//JSO.internalStates[atoken.state](atoken);
 			delete JSO.internalStates[atoken.state];
 		}
 
@@ -327,7 +328,8 @@ define(function(require, exports, module) {
 		utils.log("Successfully obtain a token, now call the callback, and may be the window closes", callback);
 
 		if (typeof callback === 'function') {
-	//		callback(atoken);
+			console.log(callback);
+			callback(atoken);
 		}
 
 		// utils.log(atoken);
