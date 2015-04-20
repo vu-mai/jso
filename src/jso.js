@@ -534,6 +534,10 @@ define(function(require, exports, module) {
 		store.wipeTokens(this.providerID);
 	};
 
+	JSO.prototype.wipeCode = function() {
+		store.wipeCode(this.providerID);
+	};
+
 
 	JSO.prototype.ajax = function(settings) {
 

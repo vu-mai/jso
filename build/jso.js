@@ -1349,6 +1349,10 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		store.wipeTokens(this.providerID);
 	};
 
+	JSO.prototype.wipeCode = function() {
+		store.wipeCode(this.providerID);
+	};
+
 
 	JSO.prototype.ajax = function(settings) {
 
