@@ -170,9 +170,9 @@ define(function(require, exports, module) {
 	 */
 	JSO.prototype.URLcontainsCode = function(url) {
 		if(!URLcontainsString(url, "code")){
-			return url.indexOf("code") > -1;
+			return url.indexOf("code") > -1 && url.indexOf("response_type=code") === -1;
 		}
-		return true;
+		return url.indexOf("response_type=code") === -1;
 	};	
 
 	

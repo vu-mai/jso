@@ -998,9 +998,9 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 	 */
 	JSO.prototype.URLcontainsCode = function(url) {
 		if(!URLcontainsString(url, "code")){
-			return url.indexOf("code") > -1;
+			return url.indexOf("code") > -1 && url.indexOf("response_type=code") === -1;
 		}
-		return true;
+		return url.indexOf("response_type=code") === -1;
 	};	
 
 	
