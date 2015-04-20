@@ -6,6 +6,8 @@ define(function(require, exports, module) {
 	var store = {};
 
 
+
+
 	/**
 		saveState stores an object with an Identifier.
 		TODO: Ensure that both localstorage and JSON encoding has fallbacks for ancient browsers.
@@ -138,6 +140,17 @@ define(function(require, exports, module) {
 		return tokens[0];
 	};
 
+	store.getRefreshToken = function(provider){
+		return JSON.parse(localStorage.getItem("refresh_token-" + provider));
+	};
+
+	store.saveRefreshToken = function(provider, token){
+		localStorage.setItem("refresh_token-" + provider, JSON.stringify(token));
+	};
+
+	store.wipeRefreshToken = function(provider){
+		localstorage.removeItem("refresh_token-" + provider);
+	};
 
 	store.getCode = function(provider){
 		return JSON.parse(localStorage.getItem("code-" + provider));

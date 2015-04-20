@@ -424,6 +424,8 @@ define(function(require, exports, module) {
 			JSO.internalStates[request.state] = callback;
 		}
 
+		var refresh_token = store.getRefreshToken();
+
 		var code = store.getCode(providerID);
 
 		request.redirect_uri = this.config.get('redirect_uri', '');
@@ -440,9 +442,14 @@ define(function(require, exports, module) {
 		if(code !== null){
 			request.grant_type = "authorization_code";
 			request.code = code;
+		}else if(refresh_token !== null){
+			request.refresh_token = refresh_token;
+			console.log("Is refresh_token");
+			request.grant_type = "refresh_token";
 		}else{
 			request.response_type = "code";
 		}
+		
 
 		/*
 		 * Calculate which scopes to request, based upon provider config and request config.

@@ -593,6 +593,8 @@ define('store',['require','exports','module','./utils'],function(require, export
 	var store = {};
 
 
+
+
 	/**
 		saveState stores an object with an Identifier.
 		TODO: Ensure that both localstorage and JSON encoding has fallbacks for ancient browsers.
@@ -725,6 +727,17 @@ define('store',['require','exports','module','./utils'],function(require, export
 		return tokens[0];
 	};
 
+	store.getRefreshToken = function(provider){
+		return JSON.parse(localStorage.getItem("refresh_token-" + provider));
+	};
+
+	store.saveRefreshToken = function(provider, token){
+		localStorage.setItem("refresh_token-" + provider, JSON.stringify(token));
+	};
+
+	store.wipeRefreshToken = function(provider){
+		localstorage.removeItem("refresh_token-" + provider);
+	};
 
 	store.getCode = function(provider){
 		return JSON.parse(localStorage.getItem("code-" + provider));
@@ -1239,6 +1252,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			JSO.internalStates[request.state] = callback;
 		}
 
+		var refresh_token = store.getRefreshToken();
+
 		var code = store.getCode(providerID);
 
 		request.redirect_uri = this.config.get('redirect_uri', '');
@@ -1255,9 +1270,14 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		if(code !== null){
 			request.grant_type = "authorization_code";
 			request.code = code;
+		}else if(refresh_token !== null){
+			request.refresh_token = refresh_token;
+			console.log("Is refresh_token");
+			request.grant_type = "refresh_token";
 		}else{
 			request.response_type = "code";
 		}
+		
 
 		/*
 		 * Calculate which scopes to request, based upon provider config and request config.
