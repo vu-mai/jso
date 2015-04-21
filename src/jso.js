@@ -206,7 +206,14 @@ define(function(require, exports, module) {
 		// If a url is provided 
 		if (url) {
 			// utils.log('Hah, I got the url and it ' + url);
-			if(url.indexOf('#') === -1) return;
+			if(url.indexOf('#') === -1){
+				if(url.indexOf('?') === -1){
+					h = url.substring(url.indexOf('#'));
+				}else{
+					return;
+				}
+			}
+
 			h = url.substring(url.indexOf('#'));
 			// utils.log('Hah, I got the hash and it is ' +  h);
 		}
