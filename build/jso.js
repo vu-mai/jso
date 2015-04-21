@@ -905,7 +905,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		            if (that.URLcontainsToken(url) || that.URLcontainsCode(url)) {
 
 		                // ref.removeEventListener('loadstop', onNewURLinspector);
-		         /*       setTimeout(function() {
+		                setTimeout(function() {
 		                	ref.close();
 		                }, 500);
 		                
@@ -915,7 +915,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			                utils.log("Closing window ", ref);
 			                if (typeof callback === 'function') callback();
 			            });	    
-			            */
+			            
 			           
 			           console.log("LOADSTOP URL");
 		            }
