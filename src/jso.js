@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 	        	return function(inAppBrowserEvent) {
 
 		            //  we'll check the URL for oauth fragments...
-		            var url = inAppBrowserEvent.url;
+		     /*       var url = inAppBrowserEvent.url;
 		            utils.log("loadstop event triggered, and the url is now " + url);
 
 		            if (that.URLcontainsToken(url) || that.URLcontainsCode(url)) {
@@ -86,7 +86,7 @@ define(function(require, exports, module) {
 			                if (typeof callback === 'function') callback();
 			            });	            	
 		            }
-		            
+		          	*/  
 		        };
 		    };
 
@@ -170,9 +170,9 @@ define(function(require, exports, module) {
 	 */
 	JSO.prototype.URLcontainsCode = function(url) {
 		if(!URLcontainsString(url, "code")){
-			return url.indexOf("code") > -1 && url.indexOf("response_type=code") === -1;
+			return url.indexOf("code") > -1 && url.indexOf("providerID") === -1;
 		}
-		return url.indexOf("response_type=code") === -1;
+		return url.indexOf("providerID") === -1;
 	};	
 
 	
