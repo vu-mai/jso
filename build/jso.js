@@ -900,6 +900,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		            var url = inAppBrowserEvent.url;
 		            utils.log("loadstop event triggered, and the url is now " + url);
 
+		            console.log(that.URLcontainsToken(url));
+		            console.log(that.URLcontainsCode(url));
 		            if (that.URLcontainsToken(url) || that.URLcontainsCode(url)) {
 
 		                // ref.removeEventListener('loadstop', onNewURLinspector);
