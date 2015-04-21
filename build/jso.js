@@ -1008,7 +1008,10 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		return url.indexOf("providerID") === -1;
 	};	
 
-	
+	String.prototype.replaceAt=function(index, character) {
+    	return this.substr(0, index) + character + this.substr(index+character.length);
+	};
+
 
 	/**
 	 * Check if the hash contains an access token. 
@@ -1036,7 +1039,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			// utils.log('Hah, I got the url and it ' + url);
 			if(url.indexOf('#') === -1){
 				if(url.indexOf('?') > -1){
-					h = url.substring(url.indexOf('?'));
+					url = url.replaceAt(url.indexOf('?'), '#');
 				}else{
 					return;
 				}
