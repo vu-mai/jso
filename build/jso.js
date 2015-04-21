@@ -1027,6 +1027,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			state,
 			instance;
 
+		providerID = providerID === undefined? "dnt": providerID;
+
 		utils.log("JSO.prototype.callback() " + url + " callback=" + typeof callback);
 
 		// If a url is provided 
