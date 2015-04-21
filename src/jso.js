@@ -69,13 +69,13 @@ define(function(require, exports, module) {
 	        	return function(inAppBrowserEvent) {
 
 		            //  we'll check the URL for oauth fragments...
-		     /*       var url = inAppBrowserEvent.url;
+		            var url = inAppBrowserEvent.url;
 		            utils.log("loadstop event triggered, and the url is now " + url);
 
 		            if (that.URLcontainsToken(url) || that.URLcontainsCode(url)) {
 
 		                // ref.removeEventListener('loadstop', onNewURLinspector);
-		                setTimeout(function() {
+		         /*       setTimeout(function() {
 		                	ref.close();
 		                }, 500);
 		                
@@ -84,9 +84,12 @@ define(function(require, exports, module) {
 			                // When we've found OAuth credentials, we close the inappbrowser...
 			                utils.log("Closing window ", ref);
 			                if (typeof callback === 'function') callback();
-			            });	            	
+			            });	    
+			            */
+			           
+			           console.log("LOADSTOP URL");
 		            }
-		          	*/  
+		          	 
 		        };
 		    };
 
