@@ -207,8 +207,8 @@ define(function(require, exports, module) {
 		if (url) {
 			// utils.log('Hah, I got the url and it ' + url);
 			if(url.indexOf('#') === -1){
-				if(url.indexOf('?') === -1){
-					h = url.substring(url.indexOf('#'));
+				if(url.indexOf('?') > -1){
+					h = url.substring(url.indexOf('?'));
 				}else{
 					return;
 				}
