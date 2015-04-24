@@ -1392,7 +1392,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		store.wipeCode(this.providerID);
 	};
 
-	JSO.prototype.getToken = function(settings){
+	JSO.prototype.getAccessToken = function(settings){
 		function tokenCallback(access_token){
 			var def = JSO.$.Deferred();
 
