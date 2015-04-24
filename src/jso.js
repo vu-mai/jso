@@ -573,7 +573,7 @@ define(function(require, exports, module) {
 			return def.promise();
 		}
 
-		return performAjaxRequest(settings, tokenCallback);
+		return this.performAjaxRequest(settings, tokenCallback);
 	};
 
 	JSO.prototype.performAjaxRequest = function(settings, resultCallback){
@@ -644,7 +644,7 @@ define(function(require, exports, module) {
 			return JSO.$.ajax(settings);
 		}
 
-		return performAjaxRequest(settings, tokenCallback);
+		return this.performAjaxRequest(settings, tokenCallback);
 		
 	};
 

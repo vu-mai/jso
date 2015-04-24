@@ -1401,7 +1401,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			return def.promise();
 		}
 
-		return performAjaxRequest(settings, tokenCallback);
+		return this.performAjaxRequest(settings, tokenCallback);
 	};
 
 	JSO.prototype.performAjaxRequest = function(settings, resultCallback){
@@ -1472,7 +1472,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			return JSO.$.ajax(settings);
 		}
 
-		return performAjaxRequest(settings, tokenCallback);
+		return this.performAjaxRequest(settings, tokenCallback);
 		
 	};
 
