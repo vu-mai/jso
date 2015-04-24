@@ -630,7 +630,8 @@ define(function(require, exports, module) {
 	};
 
 	JSO.prototype.ajax = function(settings) {
-
+		var that = this;
+		
 		function tokenCallback(access_token){
 			if (that.config.get('presenttoken', null) === 'qs') {
 				// settings.url += ((h.indexOf("?") === -1) ? '?' : '&') + "access_token=" + encodeURIComponent(token["access_token"]);
