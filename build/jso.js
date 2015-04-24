@@ -1320,6 +1320,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			request.scopes = scopes;
 		}
 
+		console.log(authurl);
+
 		utils.log("Saving state [" + request.state + "]");
 		utils.log(JSON.parse(JSON.stringify(request)));
 
@@ -1390,8 +1392,19 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		store.wipeCode(this.providerID);
 	};
 
+	JSO.prototype.getToken = function(settings){
+		function tokenCallback(access_token){
+			var def = JSO.$.Deferred();
 
-	JSO.prototype.ajax = function(settings) {
+			def.resolve(access_token);
+
+			return def.promise();
+		}
+
+		return performAjaxRequest(settings, tokenCallback);
+	};
+
+	JSO.prototype.performAjaxRequest = function(settings, resultCallback){
 
 		var 
 			allowia,
@@ -1432,16 +1445,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 				return that.getToken(tokenCallback, oauthOptions);
 			}
 
-			if (that.config.get('presenttoken', null) === 'qs') {
-				// settings.url += ((h.indexOf("?") === -1) ? '?' : '&') + "access_token=" + encodeURIComponent(token["access_token"]);
-				if (!settings.data) settings.data = {};
-				settings.data.access_token = token.access_token;
-			} else {
-				if (!settings.headers) settings.headers = {};
-				settings.headers.Authorization = "Bearer " + token.access_token;
-			}
-			utils.log('$.ajax settings', settings);
-			return JSO.$.ajax(settings);
+			return resultCallback(token.access_token);
 
 		}
 
@@ -1451,6 +1455,24 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		return token;
 
+	};
+
+	JSO.prototype.ajax = function(settings) {
+
+		function tokenCallback(access_token){
+			if (that.config.get('presenttoken', null) === 'qs') {
+				// settings.url += ((h.indexOf("?") === -1) ? '?' : '&') + "access_token=" + encodeURIComponent(token["access_token"]);
+				if (!settings.data) settings.data = {};
+				settings.data.access_token = access_token;
+			} else {
+				if (!settings.headers) settings.headers = {};
+				settings.headers.Authorization = "Bearer " + access_token;
+			}
+			utils.log('$.ajax settings', settings);
+			return JSO.$.ajax(settings);
+		}
+
+		return performAjaxRequest(settings, tokenCallback);
 		
 	};
 
