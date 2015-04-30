@@ -1286,7 +1286,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		if(code !== null){
 			request.grant_type = "authorization_code";
-			request.code = code;
+			request.code = code.code;
 		}else if(refresh_token !== null){
 			request.refresh_token = refresh_token;
 			console.log("Is refresh_token");
