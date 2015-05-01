@@ -605,7 +605,6 @@ define('store',['require','exports','module','./utils'],function(require, export
 
 	 */
 	store.saveState = function (state, obj) {
-		delete obj.client_secret;
 		localStorage.setItem("state-" + state, JSON.stringify(obj));
 	};
 	
@@ -1175,6 +1174,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		if (typeof callback === 'function') {
 			console.log(callback);
+            console.log(atoken);
 			callback(atoken);
 		}
 
@@ -1224,7 +1224,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		
 		var scopesRequire = this._getRequiredScopes(opts);
 		var token = store.getToken(this.providerID, scopesRequire);
-
+        console.log("TOOOOOOOOOOOOOOOOOOOOOOOOOOOKEN")
+        console.log(token);
 		if (token) {
 			return callback(token);
 		} else {

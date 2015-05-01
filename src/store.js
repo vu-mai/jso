@@ -18,7 +18,6 @@ define(function(require, exports, module) {
 
 	 */
 	store.saveState = function (state, obj) {
-		delete obj.client_secret;
 		localStorage.setItem("state-" + state, JSON.stringify(obj));
 	};
 	
