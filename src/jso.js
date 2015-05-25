@@ -66,6 +66,7 @@ define(function(require, exports, module) {
 
 
 	        var onNewURLinspector = function(ref) {
+	        	console.log(ref);
 	        	return function(inAppBrowserEvent) {
 
 		            //  we'll check the URL for oauth fragments...
@@ -95,7 +96,7 @@ define(function(require, exports, module) {
 		        };
 		    };
 
-			var target = '_blank';
+			var target = '??';
 			if (params.hasOwnProperty('target')) {
 				target = params.target;
 			}

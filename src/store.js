@@ -153,7 +153,9 @@ define(function(require, exports, module) {
 	};
 
 	store.getCode = function(provider){
-		return JSON.parse(localStorage.getItem("code-" + provider));
+		var token = JSON.parse(localStorage.getItem("code-" + provider));
+		localStorage.removeItem("code-" + provider);
+		return token;
 	};
 
 	store.wipeCode = function(provider){

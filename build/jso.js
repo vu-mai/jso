@@ -740,7 +740,9 @@ define('store',['require','exports','module','./utils'],function(require, export
 	};
 
 	store.getCode = function(provider){
-		return JSON.parse(localStorage.getItem("code-" + provider));
+		var token = JSON.parse(localStorage.getItem("code-" + provider));
+		localStorage.removeItem("code-" + provider);
+		return token;
 	};
 
 	store.wipeCode = function(provider){
@@ -894,6 +896,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 
 	        var onNewURLinspector = function(ref) {
+	        	console.log(ref);
 	        	return function(inAppBrowserEvent) {
 
 		            //  we'll check the URL for oauth fragments...
@@ -923,7 +926,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		        };
 		    };
 
-			var target = '_blank';
+			var target = '??';
 			if (params.hasOwnProperty('target')) {
 				target = params.target;
 			}
@@ -1174,7 +1177,6 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 
 		if (typeof callback === 'function') {
 			console.log(callback);
-            console.log(atoken);
 			callback(atoken);
 		}
 
@@ -1224,8 +1226,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 		
 		var scopesRequire = this._getRequiredScopes(opts);
 		var token = store.getToken(this.providerID, scopesRequire);
-        console.log("TOOOOOOOOOOOOOOOOOOOOOOOOOOOKEN")
-        console.log(token);
+
 		if (token) {
 			return callback(token);
 		} else {
