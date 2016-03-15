@@ -1031,7 +1031,8 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			h = window.location.hash,
 			now = utils.epoch(),
 			state,
-			instance;
+			instance,
+			co;
 
 		providerID = providerID === undefined? "dnt": providerID;
 
@@ -1413,8 +1414,7 @@ define('jso',['require','exports','module','./store','./utils','./Config'],funct
 			allowia,
 			scopes,
 			token,
-			providerid,
-			co;
+			providerid;
 
 		var that = this;
 

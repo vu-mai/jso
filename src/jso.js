@@ -201,7 +201,8 @@ define(function(require, exports, module) {
 			h = window.location.hash,
 			now = utils.epoch(),
 			state,
-			instance;
+			instance,
+			co;
 
 		providerID = providerID === undefined? "dnt": providerID;
 
@@ -583,8 +584,7 @@ define(function(require, exports, module) {
 			allowia,
 			scopes,
 			token,
-			providerid,
-			co;
+			providerid;
 
 		var that = this;
 
