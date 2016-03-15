@@ -201,8 +201,7 @@ define(function(require, exports, module) {
 			h = window.location.hash,
 			now = utils.epoch(),
 			state,
-			instance,
-			co;
+			instance;
 
 		providerID = providerID === undefined? "dnt": providerID;
 
@@ -275,7 +274,7 @@ define(function(require, exports, module) {
 		 * If state was not provided, and default provider contains a scope parameter
 		 * we assume this is the one requested...
 		 */
-		if (!atoken.state && co.scope) {
+		if (!atoken.state) {
 			state.scopes = instance._getRequestScopes();
 			utils.log("Setting state: ", state);
 		}
@@ -584,7 +583,8 @@ define(function(require, exports, module) {
 			allowia,
 			scopes,
 			token,
-			providerid;
+			providerid,
+			co;
 
 		var that = this;
 
